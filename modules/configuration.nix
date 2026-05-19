@@ -46,26 +46,8 @@ in {
 
   networking.networkmanager.enable = lib.mkDefault true;
 
-  # WiFi connection - password managed via sops-nix
-  networking.networkmanager.ensureProfiles.profiles = {
-    "AS_Computer_Science" = {
-      connection = {
-        id = "AS_Computer_Science";
-        type = "wifi";
-        autoconnect = true;
-      };
-      wifi = {
-        mode = "infrastructure";
-        ssid = "AS_Computer_Science";
-      };
-      wifi-security = {
-        key-mgmt = "wpa-psk";
-        # psk set via sops activation script at /run/secrets/wifi_psk
-      };
-      ipv4.method = "auto";
-      ipv6.method = "auto";
-    };
-  };
+  # WiFi connection created at activation time via sops-nix (password decrypted from secrets.yaml)
+  networking.networkmanager.ensureProfiles.profiles = {};
 
   # ---------------------------------------------------------------
   # sops-nix: encrypted secrets
@@ -82,7 +64,7 @@ in {
   };
 
   system.activationScripts.wifi-psk = {
-    deps = [ "sops" ];
+    deps = [ "setupSecrets" ];
     text = ''
       PASSWORD=$(cat /run/secrets/wifi_psk)
       mkdir -p /etc/NetworkManager/system-connections
