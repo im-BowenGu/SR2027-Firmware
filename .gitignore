@@ -16,3 +16,6 @@ nix-build/
 outputs/
 *.ext4
 *.zst
+
+# Age private key for sops-nix
+.sops/age.key
