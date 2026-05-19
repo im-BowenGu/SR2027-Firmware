@@ -71,7 +71,7 @@ in {
   # sops-nix: encrypted secrets
   # ---------------------------------------------------------------
   sops = {
-    age.keyFile = "/var/lib/sops-nix/age.key";
+    age.keyFile = "/var/lib/sops-nix/keys.txt";
 
     secrets = {
       wifi_psk = {
@@ -79,15 +79,6 @@ in {
         neededForUsers = true;
       };
     };
-  };
-
-  system.activationScripts.sops-age-key = {
-    deps = [];
-    text = ''
-      mkdir -p /var/lib/sops-nix
-      cp ${../.sops/age.key} /var/lib/sops-nix/age.key
-      chmod 600 /var/lib/sops-nix/age.key
-    '';
   };
 
   system.activationScripts.wifi-psk = {
